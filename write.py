@@ -54,7 +54,6 @@ def write_to_json(results, filename):
     :param filename: A Path-like object pointing to where the data should be
     saved.
     """
-
     with open(filename, 'w') as outfile:
         output = list()
 

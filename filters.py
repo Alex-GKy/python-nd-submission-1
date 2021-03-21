@@ -1,5 +1,4 @@
-"""Provide filters for querying close approaches and limit the generated
-results.
+"""Provide filters for querying close approaches and limit the results.
 
 The `create_filters` function produces a collection of objects that is used by
 the `query` method to generate a stream of `CloseApproach` objects that match
@@ -44,9 +43,9 @@ class AttributeFilter:
     """
 
     def __init__(self, op, value):
-        """Construct a new `AttributeFilter` from an binary predicate and a
-        reference value.
+        """Construct a new `AttributeFilter`.
 
+        Uses a binary predicate and a reference value.
         The reference value will be supplied as the second (right-hand side)
         argument to the operator function. For example, an `AttributeFilter`
         with `op=operator.le` and `value=10` will, when called on an approach,
@@ -76,6 +75,7 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Return a machine readable representation."""
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, " \
                f"value={self.value})"
 
@@ -128,7 +128,6 @@ def create_filters(date=None, start_date=None, end_date=None,
     potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-
     filters = list()
 
     config = {
@@ -162,7 +161,6 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-
     if (n and n > 0):
         iterator = islice(iterator, 0, n)
 
@@ -170,35 +168,45 @@ def limit(iterator, n=None):
 
 
 class DateFilter(AttributeFilter):
+    """Filter for the date attribute."""
 
     @classmethod
     def get(cls, approach):
+        """Return the date attribute."""
         return approach.time.date()
 
 
 class DistanceFilter(AttributeFilter):
+    """Filter for the distance attribute."""
 
     @classmethod
     def get(cls, approach):
+        """Return the distance."""
         return approach.distance
 
 
 class VelocityFilter(AttributeFilter):
+    """Filter for the velocity attribute."""
 
     @classmethod
     def get(cls, approach):
+        """Return the velocity."""
         return approach.velocity
 
 
 class DiameterFilter(AttributeFilter):
+    """Filter for the diameter attribute."""
 
     @classmethod
     def get(cls, approach):
+        """Return the diameter."""
         return approach.neo.diameter
 
 
 class HazardousFilter(AttributeFilter):
+    """Filter for the 'hazardous' attribute."""
 
     @classmethod
     def get(cls, approach):
+        """Return the approach's hazardous value."""
         return approach.neo.hazardous
